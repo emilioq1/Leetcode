@@ -26,30 +26,28 @@ double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Si
     }
 
     int new_size = nums1Size + nums2Size;
-
     int* merged_array = calloc(new_size, sizeof(int));
     
     for(int i = 0; i < nums1Size; ++i) {
         merged_array[i] = nums1[i];
     }
 
-    //int next_index = nums1Size;
-    //for(int i = 0, j = 0; i < new_size || j < nums2Size; ++i, ++j) {
     for(int i = 0; i < nums2Size; ++i) {
         merged_array[nums1Size + i] = nums2[i];
     }
 
-    for(int i = 0, j = new_size; i != j; ++i, --j) {
-        printf("%d == %d\n", i, j);
-        printf("merged_array[%d]: %d\n", i, merged_array[i]);
-        printf("merged_array[%d]: %d\n", j, merged_array[j]);
-        if(merged_array[i] > merged_array[j]) {
-            int upper = merged_array[i];
-            int lower = merged_array[j];
-            merged_array[i] = lower;
-            merged_array[j] = upper;
-        }
-    }
+    //for(int i = 0, j = new_size; i != j; ++i, --j) {
+    //    printf("%d == %d\n", i, j);
+    //    printf("merged_array[%d]: %d\n", i, merged_array[i]);
+    //    printf("merged_array[%d]: %d\n", j, merged_array[j]);
+
+    //    if(merged_array[i] > merged_array[j]) {
+    //        int upper = merged_array[i];
+    //        int lower = merged_array[j];
+    //        merged_array[i] = lower;
+    //        merged_array[j] = upper;
+    //    }
+    //}
     
     printf("merged_array: ");
     printIntArray(merged_array, new_size);
@@ -64,13 +62,10 @@ double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Si
     }
     else {
         int index = ((new_size + 1) / 2) - 1;
-        printf("index: %d\n", index);
         result = (double)merged_array[index];
     }
 
-
     free(merged_array);
-
     return result;
 }
 
