@@ -26,7 +26,7 @@ double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Si
     }
 
     int new_size = nums1Size + nums2Size;
-    int* merged_array = calloc(new_size, sizeof(int));
+    int* merged_array = calloc((size_t)new_size, sizeof(int));
     
     for(int i = 0; i < nums1Size; ++i) {
         merged_array[i] = nums1[i];
@@ -36,19 +36,28 @@ double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Si
         merged_array[nums1Size + i] = nums2[i];
     }
 
-    //for(int i = 0, j = new_size; i != j; ++i, --j) {
-    //    printf("%d == %d\n", i, j);
-    //    printf("merged_array[%d]: %d\n", i, merged_array[i]);
-    //    printf("merged_array[%d]: %d\n", j, merged_array[j]);
+    printIntArray(merged_array, new_size);
 
-    //    if(merged_array[i] > merged_array[j]) {
-    //        int upper = merged_array[i];
-    //        int lower = merged_array[j];
-    //        merged_array[i] = lower;
-    //        merged_array[j] = upper;
-    //    }
-    //}
-    
+    for(int i = 0, j = 1; j < new_size; ++i, ++j) {
+        printf("i: %d, j: %d\n", i, j);
+        
+        if(merged_array[i] > merged_array[j]) {
+            printf("value in i bigger than value in j.\n");
+            
+            int temp = merged_array[i];
+            merged_array[i] = merged_array[j];
+            merged_array[j] = temp;
+            
+            if(i > 0) {
+                i -= 2;
+                j -= 2;
+            }
+
+            printIntArray(merged_array, new_size);
+        }
+        printf("\n\n");
+    }
+
     printf("merged_array: ");
     printIntArray(merged_array, new_size);
     printf("new_size: %d\n", new_size);
@@ -70,14 +79,11 @@ double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Si
 }
 
 int main(void) {
-    int nums1[] = {0, 0, 0, 0, 0};
-    int nums2[] = {-1, 0, 0, 0, 0, 0, 1};
+    int nums1[] = {1, 2};
+    int nums2[] = {3, 4};
 
     int nums1Size = sizeof(nums1) / sizeof(nums1[0]);
     int nums2Size = sizeof(nums2) / sizeof(nums2[0]);
-
-    printf("nums1Size: %d\n", nums1Size);
-    printf("nums2Size: %d\n", nums2Size);
 
     double result = findMedianSortedArrays(nums1, nums1Size, nums2, nums2Size);
 
