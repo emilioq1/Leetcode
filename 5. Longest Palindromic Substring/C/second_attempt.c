@@ -12,10 +12,9 @@
 #define MAX_LENGTH 1000
 
 
-char* createManacherString(char* s) {
+char* createManacherString(char* s, size_t ms_length) {
     size_t s_len = strnlen(s, MAX_LENGTH + 1);
-
-    char* manacher = calloc((s_len * 2) + 3, sizeof(char));
+    char* manacher = calloc(ms_length, sizeof(char));
     manacher[0] = '@';
 
     int j = 0; 
@@ -36,21 +35,11 @@ char* createManacherString(char* s) {
     return manacher;
 }
 
-int getLongest(int* p, int cen, int odd) {
-    // map original index to transformed string index
-    int pos = 2 * cen + 2 + !odd;
-
-    //printf("getLongest: %d\n", p[pos]);
-
-    return p[pos];
-}
-
-
 char* longestPalindrome(char* s) {
     size_t len = strnlen(s, MAX_LENGTH + 1);
+    size_t ms_len = (len * 2) + 4;
 
-    char* manacher = createManacherString(s);
-    size_t ms_len = strnlen(manacher, MAX_LENGTH+1);
+    char* manacher = createManacherString(s, ms_len);
     int l = 0, r = 0;
 
     int* p = calloc(ms_len + 1, sizeof(int));
@@ -84,35 +73,25 @@ char* longestPalindrome(char* s) {
     int start = (longest_index - p[longest_index]) / 2;
     int length = p[longest_index];
 
-    //printf("manacher: %s\n", manacher);
-    //printf("manacher: ");
-    //for(int i = 0; i < ms_len; ++i) {
-    //    printf("%d", i);
-    //}
-    //printf("\n");
-
-    //for(int i = 0; i < ms_len; ++i) {
-    //    //printf("manacher[%d]: %c\n", i, manacher[i]);
-    //    printf("p[%d]: %d\n", i, p[i]);
-    //}
-    //printf("longest_index: %d\n", longest_index);
-    //printf("p[longest_index]: %d\n", p[longest_index]);
-
     free(p);
     free(manacher);
 
-    char* result = calloc(MAX_LENGTH + 1, sizeof(char));
-    //strrangecpy(result, s, bestStart, maxLen);
-    strncpy(result, s+start, length);
+    char* result = calloc(length + 1, sizeof(char));
+    strncpy(result, s + start, length);
+    result[length] = '\0';
 
     return result;
 }
 
-#define TEST_CASES 7
+#define TEST_CASES 8
 
 int main() {
-    char test[TEST_CASES][MAX_LENGTH+1] = {{"babad"}, {"cbbd"}, {"a"}, {"aaaa"}, {"ac"}, {"abbcccba"}, {"321012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210123210012321001232100123210123"}};
+    char test[TEST_CASES][MAX_LENGTH+1] = {{"babad"}, {"cbbd"}, {"a"}, {"aaaa"}, {"ac"}, {"abbcccba"}, {"321012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210012321001232100123210123210012321001232100123210123"}, {"jrjnbctoqgzimtoklkxcknwmhiztomaofwwzjnhrijwkgmwwuazcowskjhitejnvtblqyepxispasrgvgzqlvrmvhxusiqqzzibcyhpnruhrgbzsmlsuacwptmzxuewnjzmwxbdzqyvsjzxiecsnkdibudtvthzlizralpaowsbakzconeuwwpsqynaxqmgngzpovauxsqgypinywwtmekzhhlzaeatbzryreuttgwfqmmpeywtvpssznkwhzuqewuqtfuflttjcxrhwexvtxjihunpywerkktbvlsyomkxuwrqqmbmzjbfytdddnkasmdyukawrzrnhdmaefzltddipcrhuchvdcoegamlfifzistnplqabtazunlelslicrkuuhosoyduhootlwsbtxautewkvnvlbtixkmxhngidxecehslqjpcdrtlqswmyghmwlttjecvbueswsixoxmymcepbmuwtzanmvujmalyghzkvtoxynyusbpzpolaplsgrunpfgdbbtvtkahqmmlbxzcfznvhxsiytlsxmmtqiudyjlnbkzvtbqdsknsrknsykqzucevgmmcoanilsyyklpbxqosoquolvytefhvozwtwcrmbnyijbammlzrgalrymyfpysbqpjwzirsfknnyseiujadovngogvptphuyzkrwgjqwdhtvgxnmxuheofplizpxijfytfabx"} };
 
+    //printf("raw: %s\n", test[7]);
+    //char* result = longestPalindrome(test[7]);
+    //printf("result: %s\n", result);
+    //if(result != NULL) free(result);
     int i = 0;
     for(i = 0; i < TEST_CASES; ++i) {
         printf("raw: %d: %s\n", i, test[i]);
