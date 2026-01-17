@@ -9,7 +9,6 @@
 #define MAX_ROWS 1000
 
 void printArray(char** arr, size_t numRows, size_t numCols) {
-
     for(int i = 0; i < numRows; ++i) {
         for(int j = 0; j < numCols; ++j) {
             printf("%c", arr[i][j]);
@@ -41,25 +40,26 @@ char* convert(char* s, int numRows) {
     printf("betweenLength: %lu\n", betweenLength);
 
     // Count the inbetween numbers: (numColumns - 1) * betweenLength;
-    size_t numFullColumns = (sLength / numRows);
-    size_t numColumnsOffset = (numFullColumns - 1) * betweenLength;
-    printf("numColumnsOffset: %lu\n", numColumnsOffset);
+    size_t numFullColumns = (size_t)(floor((double)sLength / (double)numRows));
+    size_t numSingleColumns = (numFullColumns - 1) * betweenLength;
+    printf("numColumnsOffset: %lu\n", numSingleColumns);
 
-    size_t numColumns = numFullColumns + numColumnsOffset;
+    size_t numColumns = numFullColumns + numSingleColumns;
     printf("numColumns: %lu\n", numColumns);
 
-    size_t offset = numRows - 1;
+    size_t offset = numRows + betweenLength;
     printf("offset: %lu\n\n", offset);
 
     char** arr = calloc(numRows, sizeof(char*));
     for(int i = 0; i < numRows; ++i) {
         arr[i] = calloc(numColumns, sizeof(char));
         for(int j = 0; j < numColumns; ++j) {
-            int sIndex = (j % offset) * (numRows + betweenLength);
+            int sIndex = (j * offset) + i;
 
             printf("sIndex: %d\n", sIndex);
+            printf("s[%d]: %c\n", sIndex, s[sIndex]);
 
-            if(j % (offset) == 0) {
+            if((j * 2) == sIndex) {
                 arr[i][j] = s[sIndex];
             }
             else {
@@ -94,8 +94,7 @@ int main() {
 
     int numTest[TEST_CASES] = { 3, 4, 1 };
 
-    int i = 0;
-    for(i = 0; i < TEST_CASES; ++i) {
+    for(int i = 0; i < TEST_CASES; ++i) {
         printf("s: %s, numRows: %d\n", stringTest[i], numTest[i]);
         char* result = convert(stringTest[i], numTest[i]);
         printf("result: %s\n\n", result);
@@ -105,5 +104,4 @@ int main() {
 
 
     return 0;
-
 }
