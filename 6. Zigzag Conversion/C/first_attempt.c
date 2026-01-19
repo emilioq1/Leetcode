@@ -8,21 +8,11 @@
 #define MAX_LENGTH 1000
 #define MAX_ROWS 1000
 
-void printArray(char** arr, size_t numRows, size_t numCols) {
-	for(int i = 0; i < numRows; ++i) {
-		for(int j = 0; j < numCols; ++j) {
-			printf("%c", arr[i][j]);
-		}
-		printf("\n");
-	}
-}
-
 char* convert(char* s, int numRows) {
 	size_t sLength = strnlen(s, MAX_LENGTH + 1);
-	printf("sLength: %lu\n", sLength);
 
 	if(sLength == 0) return NULL;
-	if(numRows == 0) return NULL;
+	if(numRows <= 0 || numRows > MAX_ROWS) return NULL;
 
 	char* result = calloc(sLength + 1, sizeof(char));
 
@@ -33,52 +23,41 @@ char* convert(char* s, int numRows) {
 		return result;
 	}
 
-	size_t betweenLength = 0;
-	if(numRows > 1) {
-		betweenLength = numRows - 2;
+	size_t cycleLength = (2 * numRows) - 2;
+	int i = 0;
+	int currRow = 0;
+	int currentRLen = 0;
+
+	while(currentRLen < sLength) {
+		int sIndex = (i * cycleLength) + currRow;
+		int rIndex = currentRLen;
+
+		if(sIndex < sLength) {
+			result[rIndex] = s[sIndex];
+
+			++currentRLen;
+			sIndex = (i * cycleLength) + currRow;
+			rIndex = currentRLen;
+
+			int offset = cycleLength - (2 * currRow);
+
+			// For the rows with single columns
+			if(currRow > 0 && currRow < numRows - 1 &&
+			   (sIndex + offset) < sLength) {
+				result[rIndex] = s[sIndex + offset];
+
+				++currentRLen;
+			}
+
+			++i;
+		}
+		else {
+			++currRow;
+			i = 0;
+		}
 	}
-	printf("betweenLength: %lu\n", betweenLength);
 
-	// Count the inbetween numbers: (numColumns - 1) * betweenLength;
-	size_t numFullColumns = (size_t)(floor((double)sLength / (double)numRows));
-	size_t numSingleColumns = (numFullColumns - 1) * betweenLength;
-	printf("numFullColumns: %lu\n", numFullColumns);
-	printf("numSingleColumns: %lu\n", numSingleColumns);
-
-	size_t numColumns = numFullColumns + numSingleColumns;
-	printf("numColumns: %lu\n", numColumns);
-
-	size_t offsetIndex = numRows + betweenLength;
-	printf("offsetIndex: %lu\n\n", offsetIndex);
-
-	size_t offset = 0;
-	size_t j = 0;
-
-	for(int i = 0; i < sLength; ++i) {
-		printf("s[%d]:\t%c\n", i, s[i]);
-	}
-	printf("\n");
-
-	// char** arr = calloc(numRows, sizeof(char*));
-	// for(int i = 0; i < numRows; ++i) {
-	//	arr[i] = calloc(numColumns, sizeof(char));
-	//	for(int j = 0; j < numColumns; ++j) {
-	//		int sIndex = (j * offset) + i;
-	//		printf("sIndex: %d\n", sIndex);
-	//		printf("s[%d]: %c\n", sIndex, s[sIndex]);
-	//		if((j * 2) == sIndex) {
-	//			arr[i][j] = s[sIndex];
-	//		} else {
-	//			arr[i][j] = '#';
-	//		}
-	//		printf("arr[%d][%d]: %c\n\n", i, j, arr[i][j]);
-	//	}
-	// }
-	// printArray(arr, numRows, numColumns);
-	// for(int i = 0; i < numRows; ++i) {
-	//	free(arr[i]);
-	// }
-	// free(arr);
+	result[currentRLen] = '\0';
 
 	return result;
 }
