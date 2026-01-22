@@ -3,16 +3,30 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 bool isPalindrome(int x) {
-	if(x < 10) return true;
+	if(x >= 0 && x < 10) return true;
+	if(x < 0) return false;
+
+	int xTemp = x;
+	int reverse = 0;
+
+	while(xTemp != 0) {
+		int pop = xTemp % 10;
+		xTemp /= 10;
+
+		if(reverse > INT32_MAX / 10) return false;
+		if(reverse < INT32_MIN / 10) return false;
+
+		reverse = reverse * 10 + pop;
+	}
+
+	if(x == reverse) return true;
 
 	return false;
 }
 
-#define TEST_CASES 7
+#define TEST_CASES 3
 
 int main() {
 	int cases[TEST_CASES] = {121, -121, 10};
