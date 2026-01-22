@@ -1,4 +1,7 @@
 /**
+ * Solution improved from looking at solutions in Leetcode.
+ *
+ *
  * Time complexity: O(log(N))
  * Space complexity: O(1)
  * */
@@ -12,6 +15,7 @@
 bool isPalindrome(int x) {
 	if(x >= 0 && x < 10) return true;
 	if(x < 0) return false;
+	if(x % 10 == 0 && x != 0) return false;
 
 	int xTemp = x;
 	int reverse = 0;
@@ -26,9 +30,7 @@ bool isPalindrome(int x) {
 		reverse = reverse * 10 + pop;
 	}
 
-	if(x == reverse) return true;
-
-	return false;
+	return (x == reverse);
 }
 
 #define TEST_CASES 3
