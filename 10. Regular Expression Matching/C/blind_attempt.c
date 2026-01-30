@@ -54,6 +54,10 @@ bool isMatch(char* s, char* p) {
 	if(starCount == 1 && letterOrDotCount == 0 && s[0] != p[0]) return false;
 	if(letterOrDotCount > sLen) return false;
 
+	int initialLetterCount = letterCount;
+	int initialDotCount = dotCount;
+	int initialStarCount = starCount;
+
 	char prev = '\0';
 	char curr = p[0];
 	char next = '\0';
@@ -61,6 +65,9 @@ bool isMatch(char* s, char* p) {
 	printf("--------------------------------\n");
 
 	bool ignoreMatch = false;
+	bool reverse = false;
+	int reverseIndex = sLen - letterOrDotCount;
+	int initialPIndex = 0;
 
 	for(int j = 0; j < pLen; ++j) {
 		next = p[j + 1];
@@ -95,16 +102,38 @@ bool isMatch(char* s, char* p) {
 				// printf("remainingP: %d\n", remainingP);
 				printf("\tInitial letterOrDotCount: %d\n", letterOrDotCount);
 				printf("\ts[%d] = %c\n\n", i, PRINT(s[i]));
+				int remainingS = sLen - i;
 
-				if(prev == '.') ignoreMatch = true;
 
-				while(s[i] == prev || (prev == '.' && s[i] != next)) {
-					int remainingS = sLen - i;
+				while(s[i] == prev && s[i] != next) {
+					remainingS = sLen - i;
 					printf("\tremainingS: %d\n", remainingS);
 					printf("\tletterCount: %d\n", letterCount);
 					printf("\tletterOrDotCount: %d\n", letterOrDotCount);
 
-					if(remainingS == letterCount) {
+					if(remainingS == letterCount + dotCount) {
+						printf("\tremainingS == letterOrDotCount\n");
+						break;
+					}
+					if(remainingS == 0) {
+						printf("\tremainingS == 0\n");
+						break;
+					}
+					++i;
+				}
+
+				if(prev == '.') {
+					ignoreMatch = true;
+					if(remainingS == 0) break;
+				}
+
+				while(prev == '.') {
+					remainingS = sLen - i;
+					printf("\tremainingS: %d\n", remainingS);
+					printf("\tletterCount: %d\n", letterCount);
+					printf("\tletterOrDotCount: %d\n", letterOrDotCount);
+
+					if(remainingS == letterCount + dotCount) {
 						printf("\tremainingS == letterOrDotCount\n");
 						break;
 					}
@@ -140,6 +169,11 @@ bool isMatch(char* s, char* p) {
 				else {
 					printf("\tno match\n\n");
 					if(ignoreMatch == false) return false;
+					i = sLen - 1;
+					// if(reverse == true) {
+					//	printf("reverse == true");
+					//	--i;
+					// }
 				}
 				break;
 		}
@@ -148,12 +182,32 @@ bool isMatch(char* s, char* p) {
 		letterOrDotCount = letterCount + dotCount;
 
 		if(letterOrDotCount == 0 && starCount == 0) break;
+		if(prev == '.' && curr == '*' && j != pLen - 1) {
+			initialPIndex = j;
+			reverse = true;
+		}
+		if(i == sLen - 1 && next != '*' &&
+		   (letterOrDotCount != 0 || starCount != 0) && reverse == true) {
+			letterCount = initialLetterCount;
+			dotCount = initialDotCount;
+			starCount = initialStarCount;
+
+			i = --reverseIndex;
+			j = initialPIndex;
+		}
+		if(i == 0 && reverse == true) {
+			return false;
+		}
 
 		// At end of s
 		if(next == '\0') break;
 		if(s[i] == '\0') break;
 
+
 		curr = next;
+
+		while(fgetc(stdin) != 10)
+			;
 	}
 
 	if(i != sLen) {
@@ -163,33 +217,34 @@ bool isMatch(char* s, char* p) {
 	return true;
 }
 
-#define TEST_CASES 11
+#define TEST_CASES 1
 
 int main() {
-	char* s[TEST_CASES] = {"aa",
-						   "aa",
-						   "ab",
-						   "aab",
-						   "abcd",
-						   "ab",
-						   "mississippi",
-						   "aaa",
-						   "aaa",
-						   "mississippi",
+	char* s[TEST_CASES] = {//"aa",
+						   //				   "aa",
+						   //				   "ab",
+						   //				   "aab",
+						   //				   "abcd",
+						   //				   "ab",
+						   //				   "mississippi",
+						   //				   "aaa",
+						   //				   "aaa",
+						   //				   "mississippi",
 						   "aabcbcbcaccbcaabc"};
-	char* p[TEST_CASES] = {"a",
-						   "a*",
-						   ".*",
-						   "c*a*b",
-						   "d*",
-						   ".*c",
-						   "mis*is*ip*.",
-						   "a*a",
-						   "ab*a*c*a",
-						   "mis*is*p*.",
+	char* p[TEST_CASES] = {//"a",
+						   //				   "a*",
+						   //				   ".*",
+						   //				   "c*a*b",
+						   //				   "d*",
+						   //				   ".*c",
+						   //				   "mis*is*ip*.",
+						   //				   "a*a",
+						   //				   "ab*a*c*a",
+						   //				   "mis*is*p*.",
 						   ".*a*aa*.*b*.c*.*a*"};
-	bool results[TEST_CASES] = {false, true, true, true,  false, false,
-								true,  true, true, false, true};
+	bool results[TEST_CASES] = {// false, true, true, true,  false, false,
+								// true,  true, true, false,
+								true};
 
 
 	printf("---------------------------------------------------------\n\n");
