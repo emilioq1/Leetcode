@@ -1,14 +1,52 @@
-#define _POSIX_C_SOURCE 200809L
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ == 201112L) && !defined(__STRICT_ANSI__)
+#define GNU11 1
+#endif
 
+#define _GNU_SOURCE
+#include <stdbool.h>
 #include <stdio.h>
 
-#define MAX_LENGTH 100000
+#define MAX_LENGTH 10000
 
-#define PRINT(x) x ? x : 'N'
+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
-int maxArea(int* height, int heightSize) { return 0; }
+int maxArea(int* height, int heightSize) {
+	if(heightSize == 2) {
+		return MIN(height[0], height[1]);
+	}
 
-#define TEST_CASES 2
+	int currentMax = 0;
+
+	for(int i = 0; i < heightSize; ++i) {
+		printf("i: %d\n\n", i);
+		int iHeight = height[i];
+		if(iHeight == 0) continue;
+		for(int j = heightSize - 1; j > i; --j) {
+			int jHeight = height[j];
+			if(jHeight == 0) continue;
+
+			printf("j: %d\n", j);
+
+			int height = MIN(iHeight, jHeight);
+			int width = j - i;
+			if(height == 1 && width <= currentMax) continue;
+			if(width == 1 && height <= currentMax) continue;
+
+			int area = height * width;
+			printf("area: %d\n", area);
+
+			if(area == 1000000000) return area;
+
+			if(area > currentMax) currentMax = area;
+		}
+		printf("\n\n");
+	}
+
+
+	return currentMax;
+}
+
+#define TEST_CASES 3
 
 void printArray(int* arr, int size) {
 	printf("[");
@@ -20,7 +58,10 @@ void printArray(int* arr, int size) {
 }
 
 int main() {
-	int cases[TEST_CASES][MAX_LENGTH] = {{1, 8, 6, 2, 5, 4, 8, 3, 7}, {1, 1}};
+	int cases[TEST_CASES][MAX_LENGTH] = {
+		{1, 8, 6, 2, 5, 4, 8, 3, 7},
+		{1, 1},
+	};
 	int sizes[TEST_CASES] = {9, 2};
 	int results[TEST_CASES] = {49, 1};
 
@@ -36,8 +77,7 @@ int main() {
 		printf("result: %d\n\n", result);
 
 		if(results[i] != result) {
-			printf(
-				"---------------------TEST CASE FAILED---------------------\n");
+			printf("---------------------TEST CASE FAILED---------------------\n");
 			break;
 		}
 
