@@ -1,3 +1,16 @@
+/**
+ * I used 2 hints:
+ * Hint 1
+ * If you simulate the problem, it will be O(n^2) which is not efficient.
+ *
+ * Hint 2
+ * Try to use two-pointers. Set one pointer to the left and one to the
+ * right of the array. Always move the pointer that points to the lower line.
+ *
+ * Time complexity: O(N)
+ * Space complexity: O(1)
+ */
+
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ == 201112L) && !defined(__STRICT_ANSI__)
 #define GNU11 1
 #endif
@@ -68,38 +81,53 @@ int maxArea(int* height, int heightSize) {
 
 	int currentMax = 0;
 
-	for(int i = 0; i < heightSize; ++i) {
-		printf("i: %d\n\n", i);
+	int i = 0;
+	int j = heightSize - 1;
+
+	while(i != j && i < heightSize && j > 0) {
+		printf("i: %d\n", i);
+		printf("j: %d\n\n", j);
 		int iHeight = height[i];
-		if(iHeight == 0) continue;
+		int jHeight = height[j];
+		printf("iHeight: %d\n", iHeight);
+		printf("jHeight: %d\n", jHeight);
 
-		for(int j = heightSize - 1; j > i; --j) {
-			int jHeight = height[j];
-			if(jHeight == 0) continue;
+		int width = j - i;
+		printf("width: %d\n", width);
+		int height = MIN(iHeight, jHeight);
+		printf("height: %d\n", height);
 
-			printf("j: %d\n", j);
-
-			int height = MIN(iHeight, jHeight);
-			int width = j - i;
-			if(height == 1 && width <= currentMax) continue;
-			if(width == 1 && height <= currentMax) continue;
-
-			int area = height * width;
-			printf("area: %d\n", area);
-
-			if(area == maxPossibleArea) return area;
-
-			if(area > currentMax) currentMax = area;
+		int area = width * height;
+		printf("area: %d\n", area);
+		if(area > currentMax) {
+			printf("area > currentMax\n");
+			printf("%d > %d\n", area, currentMax);
+			currentMax = area;
 		}
 
-		printf("\n\n");
-	}
 
+		if(iHeight > jHeight) {
+			printf("iHeight > jHeight\n");
+			printf("--j\n\n");
+			--j;
+		}
+		else if(iHeight < jHeight) {
+			printf("iHeight < jHeight\n");
+			printf("++i\n\n");
+			++i;
+		}
+		else {
+			printf("iHeight == jHeight\n");
+			printf("++i and --j\n\n");
+			++i;
+			--j;
+		}
+	}
 
 	return currentMax;
 }
 
-#define TEST_CASES 2
+#define TEST_CASES 3
 
 void printArray(int* arr, int size) {
 	printf("[");
@@ -116,7 +144,7 @@ int main() {
 		{1, 1},
 	};
 	int sizes[TEST_CASES] = {9, 2};
-	int results[TEST_CASES] = {49, 1};
+	int results[TEST_CASES] = {49, 1, 0};
 
 	int i = 0;
 
@@ -148,7 +176,7 @@ int main() {
 	int result = maxArea(case3.arr, case3.size);
 	printf("result: %d\n\n", result);
 
-	if(results[i] != result) {
+	if(results[2] != result) {
 		printf("---------------------TEST CASE FAILED---------------------\n");
 	}
 
