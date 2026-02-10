@@ -1,3 +1,8 @@
+/**
+ * Time complexity: O(N)
+ * Space complexity: O(1)
+ * */
+
 #define _GNU_SOURCE
 #include <stdbool.h>
 #include <stdint.h>
@@ -95,15 +100,13 @@ int main() {
 		printf("result: %d\n\n", result);
 
 		if(results[i] != result) {
-			printf(ANSI_COLOR_RED
-				   "---------------------TEST CASE "
-				   "FAILED---------------------\n" ANSI_COLOR_RESET);
+			printf(ANSI_COLOR_RED "---------------------TEST CASE "
+								  "FAILED---------------------\n" ANSI_COLOR_RESET);
 			// break;
 		}
 		else {
-			printf(ANSI_COLOR_GREEN
-				   "-------------------TEST CASE "
-				   "SUCCESS---------------------\n" ANSI_COLOR_RESET);
+			printf(ANSI_COLOR_GREEN "-------------------TEST CASE "
+									"SUCCESS---------------------\n" ANSI_COLOR_RESET);
 		}
 
 		printf("---------------------------------------------------------"
