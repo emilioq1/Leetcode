@@ -14,9 +14,37 @@
 
 #define MAX_LENGTH 200
 
-char* longestCommonPrefix(char** strs, int strsSize) { return NULL; }
+char* longestCommonPrefix(char** strs, int strsSize) {
+	if(strsSize == 1) return strs[0];
 
-#define TEST_CASES 2
+	char* matchStr = strs[0];
+	char* match = calloc(MAX_LENGTH + 1, sizeof(char));
+
+	int matchSize = 0;
+	int j = 0;
+
+	for(int i = 1; i < strsSize; ++i) {
+		printf("matchStr[%d]: %c\n", j, matchStr[j]);
+		printf("strs[%d][%d]: %c\n", i, j, strs[i][j]);
+
+		if(strs[i][j] == '\0') {
+			break;
+		}
+		else if(matchStr[j] == strs[i][j]) {
+			match[matchSize++] = matchStr[j++];
+		}
+		else break;
+	}
+
+	printf("match: %s\n", match);
+	printf("matchStr: %s\n", matchStr);
+	printf("matchSize: %d\n", matchSize);
+	printf("j: %d\n", j);
+
+	return match;
+}
+
+#define TEST_CASES 3
 
 void printArray(char** strs, int strsSize) {
 	printf("[");
@@ -32,9 +60,11 @@ void printArray(char** strs, int strsSize) {
 }
 
 int main() {
-	char actualCases[TEST_CASES][MAX_LENGTH + 1][MAX_LENGTH + 1] = {{"flower", "flow", "flight"},
-																	{"dog", "racecar", "car"}};
-	int sizes[TEST_CASES] = {3, 3};
+	char actualCases[TEST_CASES][MAX_LENGTH + 1][MAX_LENGTH + 1] = {
+		{"flower", "flow", "flight"},
+		{"dog", "racecar", "car"},
+		{"flower", "flower", "flower", "flower"}};
+	int sizes[TEST_CASES] = {3, 3, 4};
 
 	char*** cases = calloc(TEST_CASES, sizeof(char**));
 	for(int i = 0; i < TEST_CASES; ++i) {
@@ -45,7 +75,7 @@ int main() {
 		}
 	}
 
-	char results[TEST_CASES][MAX_LENGTH + 1] = {"fl", ""};
+	char results[TEST_CASES][MAX_LENGTH + 1] = {"fl", "", "flower"};
 
 	int i = 0;
 
@@ -61,14 +91,17 @@ int main() {
 		printf("result: %s\n\n", result);
 
 		if(result == NULL || strncmp(results[i], result, MAX_LENGTH + 1)) {
-			printf(ANSI_COLOR_RED "---------------------TEST CASE "
-								  "FAILED---------------------\n" ANSI_COLOR_RESET);
+			printf(ANSI_COLOR_RED
+				   "---------------------TEST CASE "
+				   "FAILED---------------------\n" ANSI_COLOR_RESET);
 			// break;
 		}
 		else {
-			printf(ANSI_COLOR_GREEN "-------------------TEST CASE "
-									"SUCCESS---------------------\n" ANSI_COLOR_RESET);
+			printf(ANSI_COLOR_GREEN
+				   "-------------------TEST CASE "
+				   "SUCCESS---------------------\n" ANSI_COLOR_RESET);
 		}
+		free(result);
 
 		printf("---------------------------------------------------------"
 			   "\n\n");
