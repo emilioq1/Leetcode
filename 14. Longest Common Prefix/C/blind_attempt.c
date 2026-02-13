@@ -1,5 +1,7 @@
 /**
- * Time complexity: O(S)? (I think its O(N))
+ * Time complexity: O(n * m)
+ *      n = number of strings
+ *      m = length of shortest common prefix (at most length of first string)
  * Space complexity: O(1)
  * */
 
