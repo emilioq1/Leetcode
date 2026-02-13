@@ -1,5 +1,5 @@
 /**
- * Time complexity: O(N)
+ * Time complexity: O(S)? (I think its O(N))
  * Space complexity: O(1)
  * */
 
@@ -18,28 +18,38 @@ char* longestCommonPrefix(char** strs, int strsSize) {
 	if(strsSize == 1) return strs[0];
 
 	char* matchStr = strs[0];
+	size_t matchStrSize = strnlen(matchStr, MAX_LENGTH);
+
 	char* match = calloc(MAX_LENGTH + 1, sizeof(char));
 
-	int matchSize = 0;
-	int j = 0;
+	int matches = 0;
+	int i = 0;
 
-	for(int i = 1; i < strsSize; ++i) {
-		printf("matchStr[%d]: %c\n", j, matchStr[j]);
-		printf("strs[%d][%d]: %c\n", i, j, strs[i][j]);
-
-		if(strs[i][j] == '\0') {
+	for(i = 0; i < matchStrSize; ++i) {
+		printf("matchStr[%d]: %c\n\n", i, matchStr[i]);
+		for(int j = 0; j < strsSize; ++j) {
+			printf("strs[%d][%d]: %c\n", j, i, strs[j][i]);
+			if(matchStr[i] == strs[j][i]) {
+				++matches;
+			}
+			else break;
+		}
+		printf("\n\n");
+		if(matches == strsSize) {
+			match[i] = matchStr[i];
+			printf("match[%d]: %c\n\n", i, match[i]);
+		}
+		else {
 			break;
 		}
-		else if(matchStr[j] == strs[i][j]) {
-			match[matchSize++] = matchStr[j++];
-		}
-		else break;
+		matches = 0;
 	}
+
+	match[i] = '\0';
+
 
 	printf("match: %s\n", match);
 	printf("matchStr: %s\n", matchStr);
-	printf("matchSize: %d\n", matchSize);
-	printf("j: %d\n", j);
 
 	return match;
 }
