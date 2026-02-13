@@ -1,4 +1,8 @@
 /**
+ * The leetcode official solution (slightly modified)
+ *
+ * Used Vertical Scanning approach
+ *
  * Time complexity: O(n * m)
  *      n = number of strings
  *      m = length of shortest common prefix (at most length of first string)
@@ -17,44 +21,18 @@
 #define MAX_LENGTH 200
 
 char* longestCommonPrefix(char** strs, int strsSize) {
-	if(strsSize == 1) return strs[0];
-
-	char* matchStr = strs[0];
-	size_t matchStrSize = strnlen(matchStr, MAX_LENGTH);
-
-	char* match = calloc(MAX_LENGTH + 1, sizeof(char));
-
-	int matches = 0;
-	int i = 0;
-
-	for(i = 0; i < matchStrSize; ++i) {
-		printf("matchStr[%d]: %c\n\n", i, matchStr[i]);
+	for(int i = 0; i < strlen(strs[0]); ++i) {
+		char c = strs[0][i];
 		for(int j = 1; j < strsSize; ++j) {
-			printf("strs[%d][%d]: %c\n", j, i, strs[j][i]);
-			if(matchStr[i] == strs[j][i]) {
-				++matches;
+			if(i == strlen(strs[j]) || strs[j][i] != c) {
+				return strndup(strs[0], i);
 			}
-			else break;
 		}
-		printf("\n\n");
-		if(matches == strsSize) {
-			match[i] = matchStr[i];
-			printf("match[%d]: %c\n\n", i, match[i]);
-		}
-		else {
-			break;
-		}
-		matches = 0;
 	}
 
-	match[i] = '\0';
-
-
-	printf("match: %s\n", match);
-	printf("matchStr: %s\n", matchStr);
-
-	return match;
+	return strndup(strs[0], MAX_LENGTH + 1);
 }
+
 
 #define TEST_CASES 3
 
