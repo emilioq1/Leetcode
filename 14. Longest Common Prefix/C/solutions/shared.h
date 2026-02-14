@@ -1,7 +1,7 @@
 #ifndef DIVIDE_AND_CONQUER_H
 #define DIVIDE_AND_CONQUER_H
 
-#define _GNU_SOURCE
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
