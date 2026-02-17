@@ -140,7 +140,7 @@ int main() {
 
 		int** result = threeSum(cases[i], sizes[i], &returnSize, &returnColumnSizes);
 		printf("result: ");
-		print2dArray(result, returnColumnSizes, returnSize);
+		print2dArray(result, returnColumnSizes, 1);
 		printf("\n");
 		printf("returnSize: %d\n", returnSize);
 		printf("returnColumnSizes: ");
@@ -148,8 +148,8 @@ int main() {
 		printf("\n");
 
 
-		if(result == NULL || isCorrect(result, returnColumnSizes, returnSize, answers[i],
-									   answersColumnSizes[i], answersSizes[i])) {
+		if(result == NULL || !isCorrect(result, returnColumnSizes, returnSize, answers[i],
+										answersColumnSizes[i], answersSizes[i])) {
 			printf(ANSI_COLOR_RED "---------------------TEST CASE "
 								  "FAILED---------------------\n" ANSI_COLOR_RESET);
 			// break;
@@ -158,7 +158,8 @@ int main() {
 			printf(ANSI_COLOR_GREEN "-------------------TEST CASE "
 									"SUCCESS---------------------\n" ANSI_COLOR_RESET);
 		}
-		free(result);
+		free2dArray((void**)result, returnSize + 1);
+		free(returnColumnSizes);
 
 		printf("---------------------------------------------------------"
 			   "\n\n");

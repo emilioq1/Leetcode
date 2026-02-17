@@ -18,4 +18,8 @@
  */
 int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes);
 
+void printArray(int* array, int size);
+void print2dArray(int** array, int* sizes, int size);
+void print3dArray(int*** array, int** columnSizes, int* sizes, int size);
+
 #endif
