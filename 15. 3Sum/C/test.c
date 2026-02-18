@@ -47,7 +47,7 @@ void print3dArray(int*** array, int** columnSizes, int* sizes, int size) {
 	printf("]\n");
 }
 
-#define TEST_CASES 3
+#define TEST_CASES 4
 
 int** convertToDoublePointer(int arr[TEST_CASES][MAX_SIZE], int sizes[]) {
 	int** result = calloc(TEST_CASES, sizeof(int*));
@@ -61,8 +61,7 @@ int** convertToDoublePointer(int arr[TEST_CASES][MAX_SIZE], int sizes[]) {
 	return result;
 };
 
-int*** convertToTriplePointer(int arr[TEST_CASES][MAX_SIZE][MAX_SIZE],
-							  int sizes[TEST_CASES],
+int*** convertToTriplePointer(int arr[TEST_CASES][MAX_SIZE][MAX_SIZE], int sizes[TEST_CASES],
 							  int columnSizes[TEST_CASES][MAX_SIZE]) {
 	int*** result = calloc(TEST_CASES, sizeof(int**));
 
@@ -93,43 +92,77 @@ void free3dArray(void*** array, int* sizes, int size) {
 	free(array);
 }
 
-bool isCorrect(int** a, int* aColumnSizes, int aSize, int** b,
-			   int* bColumnSizes, int bSize) {
+bool inArray(int* array, int size, int item) {
+	for(int i = 0; i < size; ++i) {
+		if(array[i] == item) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool isCorrect(int** a, int* aColumnSizes, int aSize, int** b, int* bColumnSizes, int bSize) {
 	if(a == NULL || b == NULL) return false;
 	if(aColumnSizes == NULL || bColumnSizes == NULL) return false;
 	if(aSize != bSize) return false;
 
+	int* aKeys = calloc(aSize, sizeof(int));
 	for(int i = 0; i < aSize; ++i) {
-		if(aColumnSizes[i] == bColumnSizes[i]) {
-			for(int j = 0; j < aColumnSizes[i]; ++j) {
-				if(a[i][j] != b[i][j]) {
-					return false;
-				}
+		aKeys[i] = a[i][0] ^ a[i][1] ^ a[i][2];
+	}
+
+	int* bKeys = calloc(aSize, sizeof(int));
+	for(int i = 0; i < aSize; ++i) {
+		bKeys[i] = b[i][0] ^ b[i][1] ^ b[i][2];
+	}
+
+	int* aMatchedIndexes = calloc(aSize, sizeof(int));
+	int aMatchedSize = 0;
+	int* bMatchedIndexes = calloc(aSize, sizeof(int));
+	int bMatchedSize = 0;
+
+
+	for(int i = 0; i < aSize; ++i) {
+		for(int j = 0; j < bSize; ++j) {
+			if(aKeys[i] == aKeys[j] && !inArray(aMatchedIndexes, aMatchedSize, i) &&
+			   !inArray(bMatchedIndexes, bMatchedSize, j)) {
+				aMatchedIndexes[aMatchedSize++] = i;
+				bMatchedIndexes[bMatchedSize++] = j;
 			}
-		}
-		else {
-			return false;
 		}
 	}
 
-	return true;
+	if(aMatchedSize == aSize && bMatchedSize == bSize) {
+		free(aMatchedIndexes);
+		free(bMatchedIndexes);
+		free(aKeys);
+		free(bKeys);
+		return true;
+	}
+
+
+	return false;
 }
 
 int main() {
 	static int cases[TEST_CASES][MAX_SIZE] = {
-		{-1, 0, 1, 2, -1, -4}, {0, 1, 1}, {0, 0, 0}};
-	static int sizes[TEST_CASES] = {6, 3, 3};
+		{-1, 0, 1, 2, -1, -4},
+		{0, 1, 1},
+		{0, 0, 0},
+		{2, -3, 0, -2, -5, -5, -4, 1, 2, -2, 2, 0, 2, -4, 5, 5, -10}};
+	static int sizes[TEST_CASES] = {6, 3, 3, 17};
 
 	static int answersA[TEST_CASES][MAX_SIZE][MAX_SIZE] = {
-		{{-1, -1, 2}, {-1, 0, 1}}, {}, {{0, 0, 0}}};
-	static int answersColumnSizesA[TEST_CASES][MAX_SIZE] = {{3, 3}, {0}, {3}};
-	static int answersSizes[TEST_CASES] = {2, 0, 1};
+		{{-1, -1, 2}, {-1, 0, 1}},
+		{},
+		{{0, 0, 0}},
+		{{-10, 5, 5}, {-5, 0, 5}, {-4, 2, 2}, {-3, -2, 5}, {-3, 1, 2}, {-2, 0, 2}}};
+	static int answersColumnSizesA[TEST_CASES][MAX_SIZE] = {{3, 3}, {0}, {3}, {3, 3, 3, 3, 3, 3}};
+	static int answersSizes[TEST_CASES] = {2, 0, 1, 6};
 
 
-	int*** answers =
-		convertToTriplePointer(answersA, answersSizes, answersColumnSizesA);
-	int** answersColumnSizes =
-		convertToDoublePointer(answersColumnSizesA, answersSizes);
+	int*** answers = convertToTriplePointer(answersA, answersSizes, answersColumnSizesA);
+	int** answersColumnSizes = convertToDoublePointer(answersColumnSizesA, answersSizes);
 
 	printf("---------------------------------------------------------\n\n");
 
@@ -138,36 +171,41 @@ int main() {
 		printf("case %d: ", i + 1);
 
 		printArray(cases[i], sizes[i]);
-		printf("\n");
+		printf("\n\n");
 
 		int returnSize = 0;
 		int* returnColumnSizes = NULL;
 
-		int** result =
-			threeSum(cases[i], sizes[i], &returnSize, &returnColumnSizes);
-		printf("result: ");
-		print2dArray(result, returnColumnSizes, 1);
+		int** result = threeSum(cases[i], sizes[i], &returnSize, &returnColumnSizes);
+		printf("Result:\n");
+		printf("\tresult: ");
+		print2dArray(result, returnColumnSizes, returnSize);
 		printf("\n");
-		printf("returnSize: %d\n", returnSize);
-		printf("returnColumnSizes: ");
+		printf("\treturnSize: %d\n", returnSize);
+		printf("\treturnColumnSizes: ");
 		printArray(returnColumnSizes, returnSize);
+		printf("\n\n");
+		printf("Should be: \n");
+		printf("\tresult: ");
+		print2dArray(answers[i], answersColumnSizes[i], answersSizes[i]);
+		printf("\n");
+		printf("\treturnSize: %d\n", answersSizes[i]);
+		printf("\treturnColumnSizes: ");
+		printArray(answersColumnSizes[i], answersSizes[i]);
 		printf("\n");
 
 
-		if(result == NULL ||
-		   !isCorrect(result, returnColumnSizes, returnSize, answers[i],
-					  answersColumnSizes[i], answersSizes[i])) {
-			printf(ANSI_COLOR_RED
-				   "---------------------TEST CASE "
-				   "FAILED---------------------\n" ANSI_COLOR_RESET);
-			// break;
+		if(result == NULL || !isCorrect(result, returnColumnSizes, returnSize, answers[i],
+										answersColumnSizes[i], answersSizes[i])) {
+			printf(ANSI_COLOR_RED "---------------------TEST CASE "
+								  "FAILED---------------------\n" ANSI_COLOR_RESET);
+			break;
 		}
 		else {
-			printf(ANSI_COLOR_GREEN
-				   "-------------------TEST CASE "
-				   "SUCCESS---------------------\n" ANSI_COLOR_RESET);
+			printf(ANSI_COLOR_GREEN "-------------------TEST CASE "
+									"SUCCESS---------------------\n" ANSI_COLOR_RESET);
 		}
-		free2dArray((void**)result, returnSize + 1);
+		free2dArray((void**)result, returnSize);
 		free(returnColumnSizes);
 
 		printf("---------------------------------------------------------"

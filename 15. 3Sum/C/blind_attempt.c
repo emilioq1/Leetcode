@@ -18,20 +18,20 @@ bool isDuplicate(int* keys, int key, int keysSize) {
  * Note: Both returned array and *columnSizes array must be malloced,
  * assume caller calls free().
  */
-int** threeSum(int* nums, int numsSize, int* returnSize,
-			   int** returnColumnSizes) {
+int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes) {
 	int** result = (int**)calloc(1, sizeof(int*));
-	result[0] = (int*)calloc(3, sizeof(int));
 	int resultSize = 0;
 	int* columnSizes = calloc(1, sizeof(int));
 
 	if(numsSize == 3) {
 		int sum = nums[0] + nums[1] + nums[2];
+
 		if(sum == 0) {
+			result[0] = (int*)calloc(3, sizeof(int));
 			result[0][0] = nums[0];
 			result[0][1] = nums[1];
 			result[0][2] = nums[2];
-			*returnSize = resultSize;
+			*returnSize = resultSize + 1;
 			columnSizes[0] = 3;
 			*returnColumnSizes = columnSizes;
 			return result;
@@ -57,33 +57,64 @@ int** threeSum(int* nums, int numsSize, int* returnSize,
 		int a = nums[i];
 		int aIndex = i;
 
-		for(int j = 1; j < numsSize; ++j) {
-			if(j == i) continue;
-
+		for(int j = i + 1; j < numsSize; ++j) {
 			int b = nums[j];
 			int bIndex = j;
 
-			if(b == a) continue;
-
-			for(int k = 2; k < numsSize; ++k) {
-				if(k == i) continue;
-				if(k == j) continue;
-
+			for(int k = j + 1; k < numsSize; ++k) {
 				int c = nums[k];
 				int cIndex = k;
 
 				printf("a: %d\n", a);
 				printf("b: %d\n", b);
-				printf("c: %d\n\n", c);
-
-				if(c == a) continue;
-				if(c == b) continue;
+				printf("c: %d\n", c);
 
 				int sum = a + b + c;
-				int key = a ^ b ^ c;
-				printf("key: %d\n", key);
+				int x, y, z = 0;
+				if(a < b && a < c) {
+					x = a;
+					if(b < c) {
+						y = b;
+						z = c;
+					}
+					else {
+						y = c;
+						z = b;
+					}
+				}
+				else if(b < a && b < c) {
+					x = b;
+					if(a < c) {
+						y = a;
+						z = c;
+					}
+					else {
+						y = c;
+						z = a;
+					}
+				}
+				else {
+					x = c;
+					if(a < b) {
+						y = a;
+						z = b;
+					}
+					else {
+						y = b;
+						z = a;
+					}
+				}
+
+				int key = ((x - y) ^ (y - z) ^ (z - x));
+				printf("key: %d\n\n", key);
 
 				if(sum == 0 && !isDuplicate(keys, key, resultSize)) {
+					result = (int**)realloc(result, (resultSize + 1) * sizeof(int*));
+					result[resultSize] = calloc(3, sizeof(int));
+					columnSizes = (int*)realloc(columnSizes, (resultSize + 1) * sizeof(int));
+					keys = (int*)realloc(keys, (resultSize + 1) * sizeof(int));
+
+
 					printf("a+b+c == 0\n");
 					result[resultSize][0] = a;
 					result[resultSize][1] = b;
@@ -92,12 +123,10 @@ int** threeSum(int* nums, int numsSize, int* returnSize,
 					keys[resultSize] = key;
 
 					++resultSize;
-					result =
-						(int**)realloc(result, (resultSize + 1) * sizeof(int*));
-					result[resultSize] = calloc(3, sizeof(int));
-					columnSizes = (int*)realloc(columnSizes,
-												(resultSize + 1) * sizeof(int));
-					keys = (int*)realloc(keys, (resultSize + 1) * sizeof(int));
+					// result = (int**)realloc(result, (resultIndex + 1) * sizeof(int*));
+					// result[resultIndex] = calloc(3, sizeof(int));
+					// columnSizes = (int*)realloc(columnSizes, (resultIndex + 1) * sizeof(int));
+					// keys = (int*)realloc(keys, (resultIndex + 1) * sizeof(int));
 
 
 					printf("resultSize: %d\n", resultSize);
@@ -105,11 +134,6 @@ int** threeSum(int* nums, int numsSize, int* returnSize,
 			}
 		}
 	}
-	printf("Finished\n");
-	printf("resultSize: %d\n", resultSize);
-
-	print2dArray(result, columnSizes, resultSize);
-	printf("\n");
 
 	*returnSize = resultSize;
 	*returnColumnSizes = columnSizes;
@@ -118,14 +142,3 @@ int** threeSum(int* nums, int numsSize, int* returnSize,
 
 	return result;
 }
-
-/**
- * 100 XOR -100 XOR 0 = -8
- * 0 XOR -100 XOR 100 = -8
- * -100 XOR 0 XOR 100 = -8
- *
- * 8 XOR -1 XOR -7
- *
- *
- *
- * */
