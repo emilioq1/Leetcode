@@ -215,5 +215,37 @@ int main() {
 	free3dArray((void***)answers, answersSizes, TEST_CASES);
 	free2dArray((void**)answersColumnSizes, TEST_CASES);
 
+	IntArray fileCase = createCase("case.txt");
+	printf("TEST CASE:\n");
+	printf("case %d: ", TEST_CASES + 1);
+
+	printArray(fileCase.arr, fileCase.size);
+	printf("\n\n");
+
+	int returnSize = 0;
+	int* returnColumnSizes = NULL;
+
+	int** result = threeSum(fileCase.arr, fileCase.size, &returnSize, &returnColumnSizes);
+	printf("Result:\n");
+	printf("\tresult: ");
+	print2dArray(result, returnColumnSizes, returnSize);
+	printf("\n");
+	printf("\treturnSize: %d\n", returnSize);
+	printf("\treturnColumnSizes: ");
+	printArray(returnColumnSizes, returnSize);
+	printf("\n\n");
+	// printf("Should be: \n");
+	// printf("\tresult: ");
+	//  print2dArray(answers[i], answersColumnSizes[i], answersSizes[i]);
+	//  printf("\n");
+	//  printf("\treturnSize: %d\n", answersSizes[i]);
+	//  printf("\treturnColumnSizes: ");
+	//  printArray(answersColumnSizes[i], answersSizes[i]);
+	//  printf("\n");
+
+
+	free2dArray((void**)result, returnSize);
+	free(returnColumnSizes);
+
 	return 0;
 }

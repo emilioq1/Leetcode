@@ -1,9 +1,9 @@
 #include "shared.h"
 
-bool isDuplicate(int* keys, int key, int keysSize) {
+bool isDuplicate(long long* keys, long long key, int keysSize) {
 	printf("isDuplicate\n");
 	for(int i = 0; i < keysSize; ++i) {
-		printf("%d == %d\n", keys[i], key);
+		printf("%lld == %lld\n", keys[i], key);
 		if(keys[i] == key) {
 			return true;
 		}
@@ -44,7 +44,7 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
 		}
 	}
 
-	int* keys = calloc(1, sizeof(int));
+	long long* keys = calloc(1, sizeof(long long));
 
 	int a = MIN_LENGTH - 1;
 	int aIndex = -1;
@@ -71,7 +71,7 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
 
 				int sum = a + b + c;
 				int x, y, z = 0;
-				if(a < b && a < c) {
+				if(a <= b && a <= c) {
 					x = a;
 					if(b < c) {
 						y = b;
@@ -82,7 +82,7 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
 						z = b;
 					}
 				}
-				else if(b < a && b < c) {
+				else if(b <= a && b <= c) {
 					x = b;
 					if(a < c) {
 						y = a;
@@ -105,14 +105,17 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
 					}
 				}
 
-				int key = ((x - y) ^ (y - z) ^ (z - x));
-				printf("key: %d\n\n", key);
+				long long key =
+					((long long)(x + MAX_LENGTH) << 36) ^ ((long long)(y + MAX_LENGTH) << 18) |
+					(long long)(z + MAX_LENGTH);
+
+				printf("key: %lld\n\n", key);
 
 				if(sum == 0 && !isDuplicate(keys, key, resultSize)) {
 					result = (int**)realloc(result, (resultSize + 1) * sizeof(int*));
 					result[resultSize] = calloc(3, sizeof(int));
 					columnSizes = (int*)realloc(columnSizes, (resultSize + 1) * sizeof(int));
-					keys = (int*)realloc(keys, (resultSize + 1) * sizeof(int));
+					keys = (long long*)realloc(keys, (resultSize + 1) * sizeof(long long));
 
 
 					printf("a+b+c == 0\n");
@@ -123,12 +126,6 @@ int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes
 					keys[resultSize] = key;
 
 					++resultSize;
-					// result = (int**)realloc(result, (resultIndex + 1) * sizeof(int*));
-					// result[resultIndex] = calloc(3, sizeof(int));
-					// columnSizes = (int*)realloc(columnSizes, (resultIndex + 1) * sizeof(int));
-					// keys = (int*)realloc(keys, (resultIndex + 1) * sizeof(int));
-
-
 					printf("resultSize: %d\n", resultSize);
 				}
 			}
