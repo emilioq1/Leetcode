@@ -3,8 +3,8 @@ CC = gcc
 CFLAGS = -std=gnu11 -O2 -fsanitize=address -fno-omit-frame-pointer -g 
 #\ -Wall -Wextra -Werror
 
-TARGET = test
-MAIN_SRC = test.c file.c
+TARGET = main
+MAIN_SRC = main.c helper/*
 BLIND_SRCS = blind_attempt.c
 BEST_SRCS = best_solution.c
 

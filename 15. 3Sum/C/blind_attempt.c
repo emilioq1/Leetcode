@@ -1,16 +1,50 @@
+/**
+ * Time complexity: O(n^2)
+ * Space complexity: O(n)
+ * */
 #include "shared.h"
 
-bool isDuplicate(long long* keys, long long key, int keysSize) {
-	printf("isDuplicate\n");
-	for(int i = 0; i < keysSize; ++i) {
-		printf("%lld == %lld\n", keys[i], key);
-		if(keys[i] == key) {
-			return true;
-		}
+int partition(int* arr, int low, int high) {
+	int pivot = arr[low];
+
+	int i = low - 1;
+	int j = high + 1;
+
+	while(true) {
+		do {
+			++i;
+		} while(arr[i] < pivot);
+
+		do {
+			--j;
+		} while(arr[j] > pivot);
+
+		if(i >= j) return j;
+
+		int temp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = temp;
+	}
+}
+
+void quicksort(int* arr, int low, int high) {
+	if(low >= 0 && high >= 0 && low < high) {
+		int p = partition(arr, low, high);
+		quicksort(arr, low, p);
+		quicksort(arr, p + 1, high);
+	}
+}
+
+int* duplicateIntArray(int* arr, int numsSize) {
+	int* result = malloc(numsSize * sizeof(int));
+
+	for(int i = 0; i < numsSize; ++i) {
+		result[i] = arr[i];
 	}
 
-	return false;
+	return result;
 }
+
 
 /**
  * Return an array of arrays of size *returnSize.
@@ -19,123 +53,75 @@ bool isDuplicate(long long* keys, long long key, int keysSize) {
  * assume caller calls free().
  */
 int** threeSum(int* nums, int numsSize, int* returnSize, int** returnColumnSizes) {
-	int** result = (int**)calloc(1, sizeof(int*));
-	int resultSize = 0;
-	int* columnSizes = calloc(1, sizeof(int));
+	int capacity = 16;
+	int** result = (int**)calloc(capacity, sizeof(int*));
+	*returnColumnSizes = (int*)calloc(capacity, sizeof(int));
+	*returnSize = 0;
 
 	if(numsSize == 3) {
 		int sum = nums[0] + nums[1] + nums[2];
 
 		if(sum == 0) {
-			result[0] = (int*)calloc(3, sizeof(int));
+			result[0] = (int*)malloc(3 * sizeof(int));
+
 			result[0][0] = nums[0];
 			result[0][1] = nums[1];
 			result[0][2] = nums[2];
-			*returnSize = resultSize + 1;
-			columnSizes[0] = 3;
-			*returnColumnSizes = columnSizes;
-			return result;
+
+			*returnColumnSizes[0] = 3;
+			*returnSize = 1;
 		}
-		else {
-			*returnSize = 0;
-			columnSizes[0] = 0;
-			*returnColumnSizes = columnSizes;
-			return result;
-		}
+
+		return result;
 	}
 
-	long long* keys = calloc(1, sizeof(long long));
+	quicksort(nums, 0, numsSize - 1);
 
-	int a = MIN_LENGTH - 1;
-	int aIndex = -1;
-	int b = MIN_LENGTH - 1;
-	int bIndex = -1;
-	int c = MIN_LENGTH - 1;
-	int cIndex = -1;
+	for(int i = 0; i < numsSize - 2; ++i) {
+		// skip duplicate anchor values
+		if(i > 0 && nums[i] == nums[i - 1]) continue;
 
-	for(int i = 0; i < numsSize; ++i) {
-		int a = nums[i];
-		int aIndex = i;
+		int j = i + 1;
+		int k = numsSize - 1;
 
-		for(int j = i + 1; j < numsSize; ++j) {
-			int b = nums[j];
-			int bIndex = j;
+		while(j < k) {
+			int sum = nums[i] + nums[j] + nums[k];
 
-			for(int k = j + 1; k < numsSize; ++k) {
-				int c = nums[k];
-				int cIndex = k;
-
-				printf("a: %d\n", a);
-				printf("b: %d\n", b);
-				printf("c: %d\n", c);
-
-				int sum = a + b + c;
-				int x, y, z = 0;
-				if(a <= b && a <= c) {
-					x = a;
-					if(b < c) {
-						y = b;
-						z = c;
-					}
-					else {
-						y = c;
-						z = b;
-					}
-				}
-				else if(b <= a && b <= c) {
-					x = b;
-					if(a < c) {
-						y = a;
-						z = c;
-					}
-					else {
-						y = c;
-						z = a;
-					}
-				}
-				else {
-					x = c;
-					if(a < b) {
-						y = a;
-						z = b;
-					}
-					else {
-						y = b;
-						z = a;
-					}
+			if(sum == 0) {
+				if(*returnSize == capacity) {
+					capacity *= 2;
+					result = (int**)realloc(result, capacity * sizeof(int*));
+					*returnColumnSizes = (int*)realloc(*returnColumnSizes, capacity * sizeof(int));
 				}
 
-				long long key =
-					((long long)(x + MAX_LENGTH) << 36) ^ ((long long)(y + MAX_LENGTH) << 18) |
-					(long long)(z + MAX_LENGTH);
+				result[*returnSize] = (int*)malloc(3 * sizeof(int));
 
-				printf("key: %lld\n\n", key);
+				result[*returnSize][0] = nums[i];
+				result[*returnSize][1] = nums[j];
+				result[*returnSize][2] = nums[k];
 
-				if(sum == 0 && !isDuplicate(keys, key, resultSize)) {
-					result = (int**)realloc(result, (resultSize + 1) * sizeof(int*));
-					result[resultSize] = calloc(3, sizeof(int));
-					columnSizes = (int*)realloc(columnSizes, (resultSize + 1) * sizeof(int));
-					keys = (long long*)realloc(keys, (resultSize + 1) * sizeof(long long));
+				(*returnColumnSizes)[*returnSize] = 3;
+				*returnSize = *returnSize + 1;
 
+				++j;
+				--k;
 
-					printf("a+b+c == 0\n");
-					result[resultSize][0] = a;
-					result[resultSize][1] = b;
-					result[resultSize][2] = c;
-					columnSizes[resultSize] = 3;
-					keys[resultSize] = key;
+				// Skip duplicate j values
+				while(j < k && nums[j] == nums[j - 1])
+					++j;
 
-					++resultSize;
-					printf("resultSize: %d\n", resultSize);
-				}
+				// Skip duplicate k values
+				while(j < k && nums[k] == nums[k + 1])
+					--k;
+			}
+			else if(sum < 0) {
+				++j;
+			}
+			else {
+				--k;
 			}
 		}
 	}
-
-	*returnSize = resultSize;
-	*returnColumnSizes = columnSizes;
-
-	free(keys);
 
 	return result;
 }
