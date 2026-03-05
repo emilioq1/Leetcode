@@ -1,15 +1,15 @@
 #ifndef SHARED_H
 #define SHARED_H
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #define TEST_CASES 2
-
 #define MAX_SIZE 26244
-#define MAX_LENGTH 9
+#define MAX_LENGTH 4
 
 
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))

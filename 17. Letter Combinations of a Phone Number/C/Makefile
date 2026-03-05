@@ -1,6 +1,6 @@
 CC = gcc
 
-CFLAGS = -std=gnu11 -O2 -fsanitize=address -fno-omit-frame-pointer -g 
+CFLAGS = -std=gnu11 -O2 -fsanitize=address -fno-omit-frame-pointer -g -lm
 #\ -Wall -Wextra -Werror
 
 TARGET = main

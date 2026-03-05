@@ -30,14 +30,14 @@ int main() {
 		int returnSize = 0;
 		char** result = letterCombinations(cases[i], &returnSize);
 
-		printf("Result:\n");
+		printf("Result: ");
 		printStringArray(result, returnSize);
 		printf("\n");
 
 
-		printf("Should be: \n");
+		printf("Should be: ");
 		printStringArray(answers[i], answersSize[i]);
-		printf("\n");
+		printf("\n\n");
 
 
 		if(result != NULL &&
