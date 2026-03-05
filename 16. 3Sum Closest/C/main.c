@@ -14,8 +14,8 @@ int main() {
 
 	printf("---------------------------------------------------------\n\n");
 
-	int start = 5;
-	int end = 6;
+	int start = 0;
+	int end = TEST_CASES;
 	for(int i = start; i < end; ++i) {
 		printf("TEST CASE:\n");
 		printf("case %d: ", start + (i + 1));
@@ -34,12 +34,14 @@ int main() {
 
 
 		if(result == answers[i]) {
-			printf(ANSI_COLOR_GREEN "-------------------TEST CASE "
-									"SUCCESS---------------------\n" ANSI_COLOR_RESET);
+			printf(ANSI_COLOR_GREEN
+				   "-------------------TEST CASE "
+				   "SUCCESS---------------------\n" ANSI_COLOR_RESET);
 		}
 		else {
-			printf(ANSI_COLOR_RED "---------------------TEST CASE "
-								  "FAILED---------------------\n" ANSI_COLOR_RESET);
+			printf(ANSI_COLOR_RED
+				   "---------------------TEST CASE "
+				   "FAILED---------------------\n" ANSI_COLOR_RESET);
 			break;
 		}
 
