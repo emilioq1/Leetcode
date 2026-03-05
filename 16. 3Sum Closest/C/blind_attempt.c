@@ -1,3 +1,8 @@
+/**
+ * Time Complexity: O(n^2)
+ * Space Complexity: O(1)
+ * */
+
 #include "shared.h"
 
 int cmp(const void* a, const void* b) { return (*(int*)a - *(int*)b); }
@@ -9,8 +14,8 @@ int threeSumClosest(int* nums, int numsSize, int target) {
 
 	int result = 0;
 
-	int currentBestDiff = MAX_LENGTH + 1;
-	int currentBestSum = 0;
+	int currentBestDiff = (MAX_TARGET_LENGTH - (MAX_NUM_LENGTH * 3)) + 1;
+	int currentBestSum = (MAX_TARGET_LENGTH - (MAX_NUM_LENGTH * 3)) + 1;
 
 	qsort(nums, numsSize, sizeof(int), cmp);
 	printIntArray(nums, numsSize);
@@ -26,20 +31,22 @@ int threeSumClosest(int* nums, int numsSize, int target) {
 
 		while(left < right) {
 			printf("i: %d\n", i);
-			printf("left: %d\n", left);
-			printf("right: %d\n", right);
-			printf("nums[i]: %d\n", nums[i]);
-			printf("nums[left]: %d\n", nums[left]);
-			printf("nums[right]: %d\n", nums[right]);
+			// printf("left: %d\n", left);
+			// printf("right: %d\n", right);
+			// printf("nums[i]: %d\n", nums[i]);
+			// printf("nums[left]: %d\n", nums[left]);
+			// printf("nums[right]: %d\n", nums[right]);
 
 			int sum = nums[i] + nums[left] + nums[right];
-			printf("sum: %d\n", sum);
-
 			int diff = 0;
 			if(sum > target) diff = sum - target;
 			else diff = target - sum;
 
+			printf("target: %d\n", target);
+			printf("sum: %d\n", sum);
 			printf("diff: %d\n\n", diff);
+			printf("currentBestDiff: %d\n", currentBestDiff);
+
 
 			if(diff < currentBestDiff) {
 				if(diff == 0) return sum;
@@ -68,9 +75,11 @@ int threeSumClosest(int* nums, int numsSize, int target) {
 				--right;
 			}
 
-			printf("\n\n");
+			// printf("\n\n");
 		}
 	}
+	printf("currentBestDiff: %d\n", currentBestDiff);
+	printf("currentBest: %d\n", currentBestSum);
 
 	result = currentBestSum;
 

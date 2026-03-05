@@ -1,23 +1,24 @@
 #include "../shared.h"
 
-bool isCorrect(int** a, int* aColumnSizes, int aSize, int** b, int* bColumnSizes, int bSize) {
+bool isCorrect(int** a, int* aColumnSizes, int aSize, int** b,
+			   int* bColumnSizes, int bSize) {
 	if(a == NULL || b == NULL) return false;
 	if(aColumnSizes == NULL || bColumnSizes == NULL) return false;
 	if(aSize != bSize) return false;
 
 	long long* aKeys = calloc(aSize, sizeof(long long));
 	for(int i = 0; i < aSize; ++i) {
-		long long key = ((long long)(a[i][0] + MAX_LENGTH) << 36) |
-						((long long)(a[i][1] + MAX_LENGTH) << 18) |
-						(long long)(a[i][2] + MAX_LENGTH);
+		long long key = ((long long)(a[i][0] + MAX_NUM_LENGTH) << 36) |
+						((long long)(a[i][1] + MAX_NUM_LENGTH) << 18) |
+						(long long)(a[i][2] + MAX_NUM_LENGTH);
 		aKeys[i] = key;
 	}
 
 	long long* bKeys = calloc(aSize, sizeof(long long));
 	for(int i = 0; i < aSize; ++i) {
-		long long key = ((long long)(b[i][0] + MAX_LENGTH) << 36) |
-						((long long)(b[i][1] + MAX_LENGTH) << 18) |
-						(long long)(b[i][2] + MAX_LENGTH);
+		long long key = ((long long)(b[i][0] + MAX_NUM_LENGTH) << 36) |
+						((long long)(b[i][1] + MAX_NUM_LENGTH) << 18) |
+						(long long)(b[i][2] + MAX_NUM_LENGTH);
 		bKeys[i] = key;
 	}
 
@@ -29,7 +30,8 @@ bool isCorrect(int** a, int* aColumnSizes, int aSize, int** b, int* bColumnSizes
 
 	for(int i = 0; i < aSize; ++i) {
 		for(int j = 0; j < bSize; ++j) {
-			if(aKeys[i] == bKeys[j] && !inArray(aMatchedIndexes, aMatchedSize, i) &&
+			if(aKeys[i] == bKeys[j] &&
+			   !inArray(aMatchedIndexes, aMatchedSize, i) &&
 			   !inArray(bMatchedIndexes, bMatchedSize, j)) {
 				aMatchedIndexes[aMatchedSize++] = i;
 				bMatchedIndexes[bMatchedSize++] = j;
