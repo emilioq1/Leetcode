@@ -30,12 +30,12 @@ int main() {
 		int returnSize = 0;
 		char** result = letterCombinations(cases[i], &returnSize);
 
-		printf("Result: ");
+		printf("Result:\t");
 		printStringArray(result, returnSize);
 		printf("\n");
 
 
-		printf("Should be: ");
+		printf("Should be:\t");
 		printStringArray(answers[i], answersSize[i]);
 		printf("\n\n");
 
@@ -45,11 +45,13 @@ int main() {
 			printf(ANSI_COLOR_GREEN
 				   "-------------------TEST CASE "
 				   "SUCCESS---------------------\n" ANSI_COLOR_RESET);
+			free2dArray((void**)result, returnSize);
 		}
 		else {
 			printf(ANSI_COLOR_RED
 				   "---------------------TEST CASE "
 				   "FAILED---------------------\n" ANSI_COLOR_RESET);
+			free2dArray((void**)result, returnSize);
 			break;
 		}
 
