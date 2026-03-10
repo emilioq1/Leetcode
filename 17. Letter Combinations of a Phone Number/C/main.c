@@ -9,12 +9,10 @@ int main() {
 	static char* cases[TEST_CASES] = {"23", "2"};
 
 	static char answersS[TEST_CASES][MAX_SIZE][MAX_LENGTH + 1] = {
-		{"ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"},
-		{"a", "b", "c"}};
+		{"ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"}, {"a", "b", "c"}};
 	static int answersSize[TEST_CASES] = {9, 3};
 
-	char*** answers =
-		converToTriplePointerChar(answersS, answersSize, TEST_CASES);
+	char*** answers = converToTriplePointerChar(answersS, answersSize, TEST_CASES);
 
 
 	printf("---------------------------------------------------------\n\n");
@@ -30,27 +28,24 @@ int main() {
 		int returnSize = 0;
 		char** result = letterCombinations(cases[i], &returnSize);
 
-		printf("Result:\t");
+		printf("Result:\n\t");
 		printStringArray(result, returnSize);
 		printf("\n");
 
 
-		printf("Should be:\t");
+		printf("Should be:\n\t");
 		printStringArray(answers[i], answersSize[i]);
 		printf("\n\n");
 
 
-		if(result != NULL &&
-		   isCorrect(result, returnSize, answers[i], answersSize[i])) {
-			printf(ANSI_COLOR_GREEN
-				   "-------------------TEST CASE "
-				   "SUCCESS---------------------\n" ANSI_COLOR_RESET);
+		if(result != NULL && isCorrect(result, returnSize, answers[i], answersSize[i])) {
+			printf(ANSI_COLOR_GREEN "-------------------TEST CASE "
+									"SUCCESS---------------------\n" ANSI_COLOR_RESET);
 			free2dArray((void**)result, returnSize);
 		}
 		else {
-			printf(ANSI_COLOR_RED
-				   "---------------------TEST CASE "
-				   "FAILED---------------------\n" ANSI_COLOR_RESET);
+			printf(ANSI_COLOR_RED "---------------------TEST CASE "
+								  "FAILED---------------------\n" ANSI_COLOR_RESET);
 			free2dArray((void**)result, returnSize);
 			break;
 		}
