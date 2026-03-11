@@ -10,8 +10,6 @@ char** letterCombinations(char* digits, int* returnSize) {
 
 	// Calculate result size and allocate memory for result
 	size_t threeSize = digitsSize;
-	// printf("digitsSize: %ld\n", digitsSize);
-
 	size_t fours = 1;
 
 	char* seven = strchr(digits, '7');
@@ -27,52 +25,47 @@ char** letterCombinations(char* digits, int* returnSize) {
 	}
 
 	*returnSize = (int)pow((double)3, (double)threeSize) * fours;
-	// printf("returnSize: %d\n", *returnSize);
-
 	char** result = (char**)calloc(*returnSize, sizeof(char*));
-
-	for(int i = 0; i < *returnSize; ++i) {
-		result[i] = (char*)calloc(MAX_LENGTH + 1, sizeof(char));
-	}
 
 	int* nums = (int*)malloc(digitsSize * sizeof(int));
 	for(int i = 0; i < digitsSize; ++i) {
 		nums[i] = digits[i] - '0';
-		// printf("nums[%d]: %d\n", i, nums[i]);
 	}
 
-	int resultIndex = 0;
-	int i = 0;
-	int k = 0;
-	int l = 0;
+	int rIndex = 0;
+	int rrIndex = 0;
+	int cIndex = 0;
 
 	char* first = letters[nums[0]];
-	int firstIndex = 0;
+	int fIndex = 0;
 
 	// Each loop creates 1 combination
-	while(resultIndex < *returnSize) {
-		result[resultIndex][l] = first[firstIndex];
-		printf("result[%d][%d] = %c\n\n", resultIndex, l, first[firstIndex]);
-		++l;
+	while(rIndex < *returnSize) {
+		result[rIndex] = (char*)calloc(MAX_LENGTH + 1, sizeof(char));
+		result[rIndex][rrIndex] = first[fIndex];
+
+		printf("result[%d][%d] = %c\n\n", rIndex, rrIndex, first[fIndex]);
+		printf("cIndex: %d\n", cIndex);
+
+		++rrIndex;
 
 		for(int j = 1; j < digitsSize; ++j) {
 			char* curr = letters[nums[j]];
-			printf("k: %d\n", k);
 			printf("curr: %s\n", curr);
 
-			result[resultIndex][l] = curr[k];
-			++l;
+			result[rIndex][rrIndex] = curr[cIndex];
+			++rrIndex;
 		}
 		printf("\n");
 
-		printf("result[%d]: %s\n\n\n", resultIndex, result[resultIndex]);
+		printf("result[%d]: %s\n\n\n", rIndex, result[rIndex]);
 
-		++k;
-		++resultIndex;
-		l = 0;
-		if((k == 4 || k == 3) || digitsSize == 1) {
-			k = 0;
-			++firstIndex;
+		++cIndex;
+		++rIndex;
+		rrIndex = 0;
+		if((cIndex == 4 || cIndex == 3) || digitsSize == 1) {
+			cIndex = 0;
+			++fIndex;
 		}
 	}
 

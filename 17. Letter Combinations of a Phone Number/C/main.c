@@ -6,11 +6,15 @@
 
 
 int main() {
-	static char* cases[TEST_CASES] = {"23", "2"};
+	static char* cases[TEST_CASES] = {"23", "2", "234"};
 
 	static char answersS[TEST_CASES][MAX_SIZE][MAX_LENGTH + 1] = {
-		{"ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"}, {"a", "b", "c"}};
-	static int answersSize[TEST_CASES] = {9, 3};
+		{"ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"},
+		{"a", "b", "c"},
+		{"adg", "adh", "adi", "aeg", "aeh", "aei", "afg", "afh", "afi",
+		 "bdg", "bdh", "bdi", "beg", "beh", "bei", "bfg", "bfh", "bfi",
+		 "cdg", "cdh", "cdi", "ceg", "ceh", "cei", "cfg", "cfh", "cfi"}};
+	static int answersSize[TEST_CASES] = {9, 3, 27};
 
 	char*** answers = converToTriplePointerChar(answersS, answersSize, TEST_CASES);
 

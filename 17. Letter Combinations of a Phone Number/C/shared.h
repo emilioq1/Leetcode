@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TEST_CASES 2
+#define TEST_CASES 3
 #define MAX_SIZE 26244
 #define MAX_LENGTH 4
 
@@ -17,12 +17,10 @@
 
 // array.c
 int** convertToDoublePointerInt(int arr[TEST_CASES][MAX_SIZE], int sizes[]);
-int*** convertToTriplePointerInt(int arr[TEST_CASES][MAX_SIZE][MAX_SIZE],
-								 int sizes[TEST_CASES],
+int*** convertToTriplePointerInt(int arr[TEST_CASES][MAX_SIZE][MAX_SIZE], int sizes[TEST_CASES],
 								 int columnSizes[TEST_CASES][MAX_SIZE]);
-char***
-converToTriplePointerChar(char arr[TEST_CASES][MAX_SIZE][MAX_LENGTH + 1],
-						  int colSize[], int size);
+char*** converToTriplePointerChar(char arr[TEST_CASES][MAX_SIZE][MAX_LENGTH + 1], int colSize[],
+								  int size);
 void free2dArray(void** array, int size);
 void free3dArray(void*** array, int* sizes, int size);
 bool inArray(int* array, int size, int item);
