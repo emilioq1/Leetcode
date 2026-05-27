@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TEST_CASES 2
+#define TEST_CASES 4
 #define MIN_LENGTH 1
 #define MAX_LENGTH 200
 #define MIN_VALUE -1000000000

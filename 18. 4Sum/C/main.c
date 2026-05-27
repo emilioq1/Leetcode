@@ -6,15 +6,22 @@
 
 
 int main() {
-	static int cases[TEST_CASES][MAX_LENGTH] = {{1, 0, -1, 0, -2, 2},
-												{2, 2, 2, 2, 2}};
-	static int targets[TEST_CASES] = {0, 8};
-	static int sizes[TEST_CASES] = {6, 5};
+	static int cases[TEST_CASES][MAX_LENGTH] = {
+		{1, 0, -1, 0, -2, 2},
+		{2, 2, 2, 2, 2},
+		{1, -2, -5, -4, -3, 3, 3, 5},
+		{0, 0, 0, 1000000000, 1000000000, 1000000000, 1000000000}};
+	static int targets[TEST_CASES] = {0, 8, -11, 1000000000};
+	static int sizes[TEST_CASES] = {6, 5, 8, 7};
 
 	static int answersS[TEST_CASES][MAX_LENGTH][MAX_LENGTH] = {
-		{{-2, -1, 1, 2}, {-2, 0, 0, 2}, {-1, 0, 0, 1}}, {{2, 2, 2, 2}}};
-	static int answersColumnSizes[TEST_CASES][MAX_LENGTH] = {{4, 4, 4}, {4}};
-	static int answersSizes[TEST_CASES] = {3, 1};
+		{{-2, -1, 1, 2}, {-2, 0, 0, 2}, {-1, 0, 0, 1}},
+		{{2, 2, 2, 2}},
+		{{-5, -4, -3, 1}},
+		{{0, 0, 0, 1000000000}}};
+	static int answersColumnSizes[TEST_CASES][MAX_LENGTH] = {
+		{4, 4, 4}, {4}, {4}, {4}};
+	static int answersSizes[TEST_CASES] = {3, 1, 1, 1};
 
 	int*** answers =
 		convertToTriplePointerInt(answersS, answersSizes, answersColumnSizes);
@@ -28,8 +35,8 @@ int main() {
 		printf("TEST CASE:\n");
 		printf("case %d: ", start + (i + 1));
 		printIntArray(cases[i], sizes[i]);
-
-		printf("\n\n");
+		printf(", target = %d\n", targets[i]);
+		printf("\n");
 
 		int returnSize = 0;
 		int* returnColumnSizes = NULL;
