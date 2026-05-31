@@ -31,9 +31,6 @@ int** fourSum(int* nums, int numsSize, int target, int* returnSize,
 
 	qsort(nums, numsSize, sizeof(int), int_cmp);
 
-	printIntArray(nums, numsSize);
-	printf("\n");
-
 	// Every item is bigger than the target, thus there is no unique quadruplets
 	// that add up to the target
 	if(nums[0] > target && nums[0] >= 0) return result;
@@ -49,7 +46,7 @@ int** fourSum(int* nums, int numsSize, int target, int* returnSize,
 
 			while(left < right) {
 				long long sum =
-					(long long)(nums[i] + nums[j] + nums[left] + nums[right]);
+					(long long)nums[i] + nums[j] + nums[left] + nums[right];
 
 				if(sum == target) {
 					if(*returnSize == capacity) {
