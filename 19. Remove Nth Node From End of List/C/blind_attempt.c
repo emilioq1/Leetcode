@@ -1,3 +1,8 @@
+/*
+ * Time complexity: O(N) (S * z)
+ * Space complexity: O(1)
+ * */
+
 #include "shared.h"
 
 /**
@@ -9,9 +14,7 @@
  */
 struct ListNode* removeNthFromEnd(struct ListNode* head, int n) {
 	if(head->next == NULL) return NULL;
-	// if(n < 1) return NULL;
 	struct ListNode* first = head;
-
 
 	int sz = 0;
 	while(head != NULL) {
@@ -21,12 +24,13 @@ struct ListNode* removeNthFromEnd(struct ListNode* head, int n) {
 		head = next;
 	}
 
-	printf("sz: %d\n", sz);
+	if(n == sz) {
+		first = first->next;
+		return first;
+	}
 
 	struct ListNode* prev = NULL;
 	struct ListNode* curr = first;
-	// struct ListNode* next = NULL;
-
 
 	for(int i = 0; i < sz - n; ++i) {
 		prev = curr;
