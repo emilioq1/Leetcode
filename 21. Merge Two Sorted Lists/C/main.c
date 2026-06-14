@@ -15,10 +15,10 @@ int main() {
 		cases[i][1] = allocateNode(casesR[i][1], sizes[i][1], 0);
 	}
 
-	static int answersR[TEST_CASES][MAX_SIZE] = {{1, 2, 3, 5}, {}, {1, 2}};
-	static int answersSizes[TEST_CASES] = {4, 0, 1};
+	static int answersR[TEST_CASES][MAX_SIZE] = {{1, 1, 2, 3, 4, 4}, {}, {0}};
+	static int answersSizes[TEST_CASES] = {6, 0, 1};
 
-	struct ListNode* answers[TEST_CASES] = {};
+	struct ListNode* answers[TEST_CASES];
 	for(int i = 0; i < TEST_CASES; ++i) {
 		if(answersSizes[i] == 0) answers[i] = NULL;
 		else {
@@ -55,7 +55,6 @@ int main() {
 			printf(ANSI_COLOR_RED
 				   "---------------------TEST CASE "
 				   "FAILED---------------------\n" ANSI_COLOR_RESET);
-			// break;
 		}
 		else {
 			printf(ANSI_COLOR_GREEN
@@ -63,15 +62,15 @@ int main() {
 				   "SUCCESS---------------------\n" ANSI_COLOR_RESET);
 		}
 
-		// freeNode(result);
+		freeNode(result);
 
 		printf("---------------------------------------------------------"
 			   "\n\n");
 	}
 
-	for(int i = 0; i < TEST_CASES; ++i) {
-		freeNodes(cases[i], 2);
-	}
+	// for(int i = 0; i < TEST_CASES; ++i) {
+	//	freeNodes(cases[i], 2);
+	// }
 
 	freeNodes(answers, TEST_CASES);
 
