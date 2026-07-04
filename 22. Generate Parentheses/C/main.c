@@ -41,6 +41,11 @@ int main() {
 				   "SUCCESS---------------------\n" ANSI_COLOR_RESET);
 		}
 
+		for(int i = 0; i < returnSize; ++i) {
+			free(result[i]);
+		}
+		free(result);
+
 		printf("---------------------------------------------------------"
 			   "\n\n");
 	}

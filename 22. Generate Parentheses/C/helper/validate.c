@@ -12,7 +12,7 @@ bool isCorrect(char** a, int aSize, char** b, int bSize) {
 	qsort(b, bSize, sizeof(char*), cmp);
 
 	for(int i = 0; i < aSize; ++i) {
-		if(!strcmp(a[i], b[i])) return false;
+		if(strcmp(a[i], b[i])) return false;
 	}
 
 	return true;
